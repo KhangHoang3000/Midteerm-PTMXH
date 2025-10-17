@@ -1,0 +1,164 @@
+{
+  "seeds": [
+    {
+      "name": "Albert Einstein",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Albert_Einstein",
+      "infobox": {
+        "nghe_nghiep": "Nhà vật lý",
+        "linh_vuc": "Vật lý lượng tử"
+      }
+    },
+    {
+      "name": "Marie Curie",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Marie_Curie",
+      "infobox": {
+        "nghe_nghiep": "Nhà hóa học, vật lý",
+        "linh_vuc": "Phóng xạ"
+      }
+    },
+    {
+      "name": "Isaac Newton",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Isaac_Newton",
+      "infobox": {
+        "nghe_nghiep": "Nhà toán học, vật lý",
+        "linh_vuc": "Cơ học cổ điển"
+      }
+    },
+    {
+      "name": "Charles Darwin",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Charles_Darwin",
+      "infobox": {
+        "nghe_nghiep": "Nhà sinh học",
+        "linh_vuc": "Tiến hóa"
+      }
+    },
+    {
+      "name": "Alan Turing",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Alan_Turing",
+      "infobox": {
+        "nghe_nghiep": "Nhà toán học, máy tính",
+        "linh_vuc": "Lý thuyết tính toán"
+      }
+    },
+    {
+      "name": "Stephen Hawking",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Stephen_Hawking",
+      "infobox": {
+        "nghe_nghiep": "Nhà vật lý",
+        "linh_vuc": "Hố đen, vũ trụ học"
+      }
+    },
+    {
+      "name": "Rosalind Franklin",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Rosalind_Franklin",
+      "infobox": {
+        "nghe_nghiep": "Nhà hóa học",
+        "linh_vuc": "Cấu trúc DNA"
+      }
+    },
+    {
+      "name": "Nikola Tesla",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Nikola_Tesla",
+      "infobox": {
+        "nghe_nghiep": "Kỹ sư điện",
+        "linh_vuc": "Điện học"
+      }
+    },
+    {
+      "name": "Ada Lovelace",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Ada_Lovelace",
+      "infobox": {
+        "nghe_nghiep": "Nhà toán học",
+        "linh_vuc": "Lập trình máy tính"
+      }
+    },
+    {
+      "name": "Richard Feynman",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Richard_Feynman",
+      "infobox": {
+        "nghe_nghiep": "Nhà vật lý",
+        "linh_vuc": "Điện động lực học lượng tử"
+      }
+    },
+    {
+      "name": "Max Planck",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Max_Planck",
+      "infobox": {
+        "nghe_nghiep": "Nhà vật lý",
+        "linh_vuc": "Lý thuyết lượng tử năng lượng"
+      }
+    },
+    {
+      "name": "Yukawa Hideki",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Yukawa_Hideki",
+      "infobox": {
+        "nghe_nghiep": "Nhà vật lý",
+        "linh_vuc": "Hạt meson và lực hạt nhân"
+      }
+    },
+    {
+      "name": "Jacobus Henricus van 't Hoff",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Jacobus_Henricus_van_%27t_Hoff",
+      "infobox": {
+        "nghe_nghiep": "Nhà hóa học",
+        "linh_vuc": "Động lực học hóa học và áp suất thẩm thấu"
+      }
+    },
+    {
+      "name": "Linus Carl Pauling",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Linus_Pauling",
+      "infobox": {
+        "nghe_nghiep": "Nhà hóa học",
+        "linh_vuc": "Liên kết hóa học và cấu trúc phức chất"
+      }
+    },
+    {
+      "name": "Fukui Kenichi",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Fukui_Kenichi",
+      "infobox": {
+        "nghe_nghiep": "Nhà hóa học",
+        "linh_vuc": "Hóa học lý thuyết phản ứng"
+      }
+    },
+    {
+      "name": "Dorothy Crowfoot Hodgkin",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Dorothy_Crowfoot_Hodgkin",
+      "infobox": {
+        "nghe_nghiep": "Nhà hóa học",
+        "linh_vuc": "X quang cấu tạo chất sinh học"
+      }
+    },
+    {
+      "name": "Emil Adolf von Behring",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Emil_Adolf_von_Behring",
+      "infobox": {
+        "nghe_nghiep": "Nhà y học",
+        "linh_vuc": "Chất huyết thanh chữa bạch hầu"
+      }
+    },
+    {
+      "name": "Ilya Ilyich Mechnikov",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Ilya_Ilyich_Mechnikov",
+      "infobox": {
+        "nghe_nghiep": "Nhà sinh học",
+        "linh_vuc": "Hệ miễn dịch"
+      }
+    },
+    {
+      "name": "Alexander Fleming",
+      "wiki_url": "https://vi.wikipedia.org/wiki/Alexander_Fleming",
+      "infobox": {
+        "nghe_nghiep": "Nhà y học",
+        "linh_vuc": "Penicillin và kháng sinh"
+      }
+    },
+    {
+      "name": "Đồ U U (Tu Youyou)",
+      "wiki_url": "https://vi.wikipedia.org/wiki/%C4%90%E1%BB%93_U_U",
+      "infobox": {
+        "nghe_nghiep": "Nhà y học",
+        "linh_vuc": "Liệu pháp chữa ký sinh trùng (artemisinin)"
+      }
+    }
+  ]
+}
