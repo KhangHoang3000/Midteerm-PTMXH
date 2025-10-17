@@ -1,0 +1,251 @@
+import json
+import requests
+from typing import Dict, List, Tuple
+
+class ScientistNodeAnalyzer:
+    """
+    Phân tích node (nhà khoa học) và các liên kết của node đó
+    """
+    
+    def __init__(self, data_file: str = "scientists_data.json"):
+        """
+        Khởi tạo với dữ liệu đã crawl
+        """
+        with open(data_file, 'r', encoding='utf-8') as f:
+            self.data = json.load(f)
+        
+        # Tạo index để truy cập nhanh
+        self.name_index = {item['name']: item for item in self.data}
+        self.pageid_index = {item['pageid']: item for item in self.data}
+    
+    def get_node_by_name(self, name: str) -> Dict:
+        """
+        Truy cập node theo tên
+        """
+        return self.name_index.get(name)
+    
+    def get_node_by_id(self, pageid: str) -> Dict:
+        """
+        Truy cập node theo page ID
+        """
+        return self.pageid_index.get(pageid)
+    
+    def get_node_info(self, name: str) -> Dict:
+        """
+        Lấy thông tin chi tiết của một nhà khoa học
+        """
+        node = self.get_node_by_name(name)
+        if not node:
+            return {"error": f"Không tìm thấy {name}"}
+        
+        infobox = node.get('infobox', {})
+        
+        # Trích xuất thông tin quan trọng
+        info = {
+            'name': node['name'],
+            'wiki_url': node['wiki_url'],
+            'occupation': infobox.get('nghề nghiệp', infobox.get('occupation', 'N/A')),
+            'field': infobox.get('lĩnh vực', infobox.get('field', 'N/A')),
+            'birth_date': infobox.get('ngày sinh', infobox.get('birth_date', 'N/A')),
+            'death_date': infobox.get('ngày mất', infobox.get('death_date', 'N/A')),
+            'nationality': infobox.get('quốc tịch', infobox.get('nationality', 'N/A')),
+            'awards': infobox.get('giải thưởng', infobox.get('awards', 'N/A')),
+            'is_scientist': node.get('is_scientist', False),
+            'num_links': len(node.get('links', []))
+        }
+        
+        return info
+    
+    def get_connections(self, name: str) -> List[Dict]:
+        """
+        Lấy tất cả các liên kết từ một nhà khoa học
+        """
+        node = self.get_node_by_name(name)
+        if not node:
+            return []
+        
+        connections = []
+        links = node.get('links', [])
+        
+        for link in links:
+            target_node = self.get_node_by_name(link)
+            if target_node:
+                connection = {
+                    'from': name,
+                    'to': link,
+                    'to_is_scientist': target_node.get('is_scientist', False),
+                    'to_url': target_node.get('wiki_url')
+                }
+                connections.append(connection)
+        
+        return connections
+    
+    def get_bidirectional_connections(self, name: str) -> Tuple[List[str], List[str]]:
+        """
+        Lấy liên kết hai chiều:
+        - outgoing: Các trang mà node này trỏ tới
+        - incoming: Các trang trỏ đến node này
+        """
+        node = self.get_node_by_name(name)
+        if not node:
+            return [], []
+        
+        # Outgoing links
+        outgoing = node.get('links', [])
+        
+        # Incoming links - tìm các node có link đến node này
+        incoming = []
+        for other_node in self.data:
+            if name in other_node.get('links', []):
+                incoming.append(other_node['name'])
+        
+        return outgoing, incoming
+    
+    def find_common_connections(self, name1: str, name2: str) -> List[str]:
+        """
+        Tìm các nhà khoa học có liên kết chung với cả hai
+        """
+        node1 = self.get_node_by_name(name1)
+        node2 = self.get_node_by_name(name2)
+        
+        if not node1 or not node2:
+            return []
+        
+        links1 = set(node1.get('links', []))
+        links2 = set(node2.get('links', []))
+        
+        common = list(links1.intersection(links2))
+        return common
+    
+    def get_network_statistics(self) -> Dict:
+        """
+        Thống kê mạng lưới
+        """
+        total_nodes = len(self.data)
+        scientist_nodes = sum(1 for node in self.data if node.get('is_scientist', False))
+        
+        total_edges = sum(len(node.get('links', [])) for node in self.data)
+        
+        # Tính degree trung bình
+        avg_degree = total_edges / total_nodes if total_nodes > 0 else 0
+        
+        # Node có nhiều connection nhất
+        max_connections_node = max(self.data, key=lambda x: len(x.get('links', [])))
+        
+        stats = {
+            'total_nodes': total_nodes,
+            'scientist_nodes': scientist_nodes,
+            'non_scientist_nodes': total_nodes - scientist_nodes,
+            'total_edges': total_edges,
+            'average_degree': round(avg_degree, 2),
+            'max_connections': {
+                'name': max_connections_node['name'],
+                'connections': len(max_connections_node.get('links', []))
+            }
+        }
+        
+        return stats
+    
+    def export_to_network_format(self, output_file: str = "network_data.json"):
+        """
+        Xuất dữ liệu sang định dạng phù hợp cho phân tích mạng
+        Format: nodes và edges riêng biệt
+        """
+        nodes = []
+        edges = []
+        edge_id = 0
+        
+        for node in self.data:
+            # Thêm node
+            infobox = node.get('infobox', {})
+            nodes.append({
+                'id': node['pageid'],
+                'name': node['name'],
+                'is_scientist': node.get('is_scientist', False),
+                'occupation': infobox.get('nghề nghiệp', infobox.get('occupation', '')),
+                'field': infobox.get('lĩnh vực', infobox.get('field', '')),
+                'url': node['wiki_url']
+            })
+            
+            # Thêm edges
+            for link in node.get('links', []):
+                target_node = self.get_node_by_name(link)
+                if target_node:
+                    edges.append({
+                        'id': edge_id,
+                        'source': node['pageid'],
+                        'target': target_node['pageid'],
+                        'source_name': node['name'],
+                        'target_name': link
+                    })
+                    edge_id += 1
+        
+        network_data = {
+            'nodes': nodes,
+            'edges': edges,
+            'metadata': self.get_network_statistics()
+        }
+        
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(network_data, f, ensure_ascii=False, indent=2)
+        
+        print(f"Đã xuất dữ liệu mạng vào {output_file}")
+        return network_data
+
+
+# ===== DEMO SỬ DỤNG =====
+
+def demo_node_access():
+    """
+    Demo các chức năng truy cập node
+    """
+    print("=== KHỞI TẠO ANALYZER ===")
+    analyzer = ScientistNodeAnalyzer("scientists_data.json")
+    
+    # Thống kê tổng quan
+    print("\n=== THỐNG KÊ MẠNG LƯỚI ===")
+    stats = analyzer.get_network_statistics()
+    for key, value in stats.items():
+        print(f"{key}: {value}")
+    
+    # Truy cập thông tin một nhà khoa học
+    print("\n=== THÔNG TIN NHÀ KHOA HỌC ===")
+    scientist_name = "Albert Einstein"
+    info = analyzer.get_node_info(scientist_name)
+    print(f"\nThông tin về {scientist_name}:")
+    for key, value in info.items():
+        print(f"  {key}: {value}")
+    
+    # Lấy các liên kết
+    print(f"\n=== CÁC LIÊN KẾT TỪ {scientist_name} ===")
+    connections = analyzer.get_connections(scientist_name)
+    print(f"Tổng số liên kết: {len(connections)}")
+    print("\n5 liên kết đầu tiên:")
+    for i, conn in enumerate(connections[:5], 1):
+        print(f"{i}. {conn['to']} (Scientist: {conn['to_is_scientist']})")
+    
+    # Liên kết hai chiều
+    print(f"\n=== LIÊN KẾT HAI CHIỀU ===")
+    outgoing, incoming = analyzer.get_bidirectional_connections(scientist_name)
+    print(f"Outgoing links: {len(outgoing)}")
+    print(f"Incoming links: {len(incoming)}")
+    print(f"\nCác trang trỏ đến {scientist_name}:")
+    for page in incoming[:5]:
+        print(f"  - {page}")
+    
+    # Tìm liên kết chung
+    print(f"\n=== LIÊN KẾT CHUNG ===")
+    scientist2 = "Marie Curie"
+    common = analyzer.find_common_connections(scientist_name, scientist2)
+    print(f"Liên kết chung giữa {scientist_name} và {scientist2}: {len(common)}")
+    if common:
+        print("Một số liên kết chung:")
+        for link in common[:5]:
+            print(f"  - {link}")
+    
+    # Xuất dữ liệu
+    print("\n=== XUẤT DỮ LIỆU MẠNG ===")
+    analyzer.export_to_network_format()
+
+if __name__ == "__main__":
+    demo_node_access()
